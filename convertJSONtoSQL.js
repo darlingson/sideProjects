@@ -1,4 +1,20 @@
 const fs = require('fs');
+function createTable(jsonData, tableName) {
+    const obj = jsonData[0];
+    let sql = `CREATE TABLE IF NOT EXISTS ${tableName} (\n`;
+    sql += `id INT PRIMARY KEY,\n`;
+    sql += `name VARCHAR(255),\n`;
+    sql += `description TEXT,\n`;
+    sql += `district VARCHAR(255),\n`;
+    sql += `location VARCHAR(255),\n`;
+    sql += `link VARCHAR(255),\n`;
+    sql += `latitude FLOAT,\n`;
+    sql += `longitude FLOAT,\n`;
+    sql += `image_paths TEXT\n`;
+    sql += `);\n`;
+
+    return sql;
+}
 function jsonToSQL(jsonData, tableName) {
     let sql = `INSERT INTO ${tableName} (id, name, description, district, location, link, latitude, longitude, image_paths) VALUES\n`;
 
@@ -15,7 +31,7 @@ function jsonToSQL(jsonData, tableName) {
 
 const inputFile = 'input.json'; 
 const outputFile = 'output.sql';
-const tableName = 'your_table';
+const tableName = 'table_name';
 
 fs.readFile(inputFile, 'utf8', (err, data) => {
     if (err) {
@@ -25,6 +41,7 @@ fs.readFile(inputFile, 'utf8', (err, data) => {
 
     try {
         const jsonData = JSON.parse(data);
+        let sql = createTable(jsonData, tableName);
         const sql = jsonToSQL(jsonData, tableName);
 
         fs.writeFile(outputFile, sql, err => {
