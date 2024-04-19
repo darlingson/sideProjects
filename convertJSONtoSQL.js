@@ -42,7 +42,8 @@ fs.readFile(inputFile, 'utf8', (err, data) => {
     try {
         const jsonData = JSON.parse(data);
         let sql = createTable(jsonData, tableName);
-        const sql = jsonToSQL(jsonData, tableName);
+        sql += '\n\n';
+        sql += jsonToSQL(jsonData, tableName);
 
         fs.writeFile(outputFile, sql, err => {
             if (err) {
